@@ -9,8 +9,9 @@
     using Models.Soils;
     using Models.PMF;
     using APSIM.Shared.Utilities;
-  
-
+    using NetMQ;
+    using NetMQ.Sockets;
+      
     /// <summary>
     /// Monitor and influence simulation using ZMQ sockets
     /// </summary>
@@ -32,17 +33,35 @@
         [Link]
         private Simulation simulation = null;
 
+        [NonSerialized]
+        private RequestSocket client;
+
         /// <summary>HostName</summary>
         [Description("ZeroMQ host url: ")]
         public String HostURL { get; set; }
         //private String HostURL = "";
 
+        [EventSubscribe("StartOfSimulation")]
+        private void Connect(object sender, EventArgs e)
+        {
+            client = new RequestSocket();
+            client.Connect("tcp://localhost:5555");
+            client.SendFrame("Connected!");
+            var message = client.ReceiveFrameString();
+            var sim = simulation;
+            Console.Write(HostURL);
+        }
+
+
         [EventSubscribe("DoManagement")]
         private void DoDailyCalculations(object sender, EventArgs e)
         {
-            Console.WriteLine(clock.ToString());
-            var sim2 = simulation;
-            Console.Write(HostURL);
+            //Console.WriteLine(clock.ToString());
+            //Console.Write(HostURL);
+            client.SendFrame(clock.Today.ToString());
+            //client.SendFrame("Daily!");
+            var message = client.ReceiveFrameString();
+            //Console.WriteLine("Received {0}", message);
         }
 
     }
