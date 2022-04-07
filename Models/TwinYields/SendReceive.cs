@@ -27,8 +27,8 @@
         //[Link]
         //Weather weather = null;
 
-        //[Link]
-        //Soil soil = null;
+        [Link]
+        Soil soil = null;
 
         [Link]
         private Simulation simulation = null;
@@ -49,6 +49,7 @@
             client.SendFrame("Connected!");
             var message = client.ReceiveFrameString();
             var sim = simulation;
+            var s = soil;
             Console.Write(HostURL);
         }
 
