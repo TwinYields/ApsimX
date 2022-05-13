@@ -23,9 +23,6 @@ namespace Models
         Weather weather = null;
 
         [Link]
-        SoilWater soilWater = null;
-
-        [Link]
         ISoilWater swat = null;
 
         [Link]
@@ -51,9 +48,10 @@ namespace Models
         private void ModifyWeatherData(object sender, EventArgs e)
         {
             OriginalRain = weather.Rain;
-            Console.WriteLine(OriginalRain.ToString());
             if (clock.Today >= StartDate)
-                weather.Rain = RainfallMultiplier * weather.Rain + RainfallAddition;
+                Console.WriteLine(OriginalRain.ToString());
+            //    weather.Rain = RainfallMultiplier * weather.Rain + RainfallAddition;
+
         }
 
 
@@ -62,20 +60,25 @@ namespace Models
             //double[] sw = soilWater
             //sw[1] = 0.5;
             //soilWater.SW = sw;
-            var Orig = swat.SW.Clone();
+            var Orig = (double[])swat.SW.Clone();
             swat.SW[0] = 0.0;
             swat.SW[1] = 0.1;
-            Console.WriteLine(simulation);
-            Console.WriteLine(soilWater);
-            Console.WriteLine(swat);
-            Console.WriteLine("end");
+            Console.WriteLine(swat.SW[0]);
+            var sim = simulation;
+            //Console.WriteLine(simulation);
+            //Console.WriteLine(soilWater);
+            //Console.WriteLine(swat);
+            Console.Write(clock.Today + "," + swat.SW[1] + "," + Orig[1] + ",");
+            //Console.WriteLine("end");
         }
 
         [EventSubscribe("DoPhenology")]
         private void changePhenology(object sender, EventArgs e)
         {
-            Console.WriteLine(swat);
-            Console.WriteLine("end");
+            var SW = swat.SW;
+            Console.WriteLine(SW[1]);
+            //Console.WriteLine(swat);
+            //Console.WriteLine("end");
         }
     }
 }
