@@ -4,6 +4,7 @@ using Models.Climate;
 using Models.Interfaces;
 using Models.PMF;
 using APSIM.Shared.Utilities;
+using APSIM.Shared.APSoil;
 
 namespace Models
 {
@@ -20,6 +21,15 @@ namespace Models
 
         [Link]
         Weather weather = null;
+
+        [Link]
+        SoilWater soilWater = null;
+
+        [Link]
+        ISoilWater swat = null;
+
+        [Link]
+        private Simulation simulation = null;
 
         /// <summary>Start date for modifying rainfall</summary>
         [Description("Start modifying rainfall from date:")]
@@ -44,6 +54,28 @@ namespace Models
             Console.WriteLine(OriginalRain.ToString());
             if (clock.Today >= StartDate)
                 weather.Rain = RainfallMultiplier * weather.Rain + RainfallAddition;
+        }
+
+
+        [EventSubscribe("DoSoilWaterMovement")]
+        private void SoilWaterUpdate(object sender, EventArgs e) {
+            //double[] sw = soilWater
+            //sw[1] = 0.5;
+            //soilWater.SW = sw;
+            var Orig = swat.SW.Clone();
+            swat.SW[0] = 0.0;
+            swat.SW[1] = 0.1;
+            Console.WriteLine(simulation);
+            Console.WriteLine(soilWater);
+            Console.WriteLine(swat);
+            Console.WriteLine("end");
+        }
+
+        [EventSubscribe("DoPhenology")]
+        private void changePhenology(object sender, EventArgs e)
+        {
+            Console.WriteLine(swat);
+            Console.WriteLine("end");
         }
     }
 }

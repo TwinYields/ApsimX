@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "APSIM.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "run WheatTest.apsimx",
+      "workingDirectory": "C:\\Users\\mpast\\git\\apsim\\ApsimX\\Examples\\TwinYields"
+    }
+  }
+}
