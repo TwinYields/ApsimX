@@ -666,9 +666,12 @@
           "ReadOnly": false
         },
         {
-          "$type": "Models.SendReceive, Models",
-          "HostURL": null,
-          "Name": "SendReceive",
+          "$type": "Models.RainfallModifier, Models",
+          "StartDate": "0001-01-01T00:00:00",
+          "RainfallMultiplier": 0.0,
+          "RainfallAddition": 0.0,
+          "OriginalRain": 0.0,
+          "Name": "RainfallModifier",
           "Children": [],
           "Enabled": true,
           "ReadOnly": false
