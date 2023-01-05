@@ -8,6 +8,7 @@ using Models;
 using Models.Storage;
 using Models.PMF;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ClockConsole
 {
@@ -43,13 +44,16 @@ namespace ClockConsole
             var wt = sim.FindByPath("[Wheat].Grain.Total.Wt");
             var wheat = sim.FindDescendant<Plant>();
             var leaf = wheat.FindChild<Models.PMF.Organs.Leaf>();
-           
+
             var storage = sims.FindChild<DataStore>();
             storage.Dispose();
             File.Delete(storage.FileName);
             storage.Open();
             sim.Prepare();
-            sim.Run();
+
+            // Run is not called as the simulation is run step by step
+            // -> New method is required to invoke events
+            sim.Commence();
 
             while (clock.Today <= clock.EndDate)
             {
@@ -58,9 +62,12 @@ namespace ClockConsole
                     sim.Progress + "," + wt.Value + "," + leaf.LAI);
             }
             clock.Done();
-
-            Console.WriteLine(simFile);
-            
+            sim.Complete();
+            sim.Cleanup();
+            storage.Close();
+            Console.WriteLine("Done");
         }
+
     }
+
 }

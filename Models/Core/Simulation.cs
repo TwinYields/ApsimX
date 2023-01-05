@@ -264,6 +264,23 @@ namespace Models.Core
             }
         }
 
+        public void Commence()
+        {
+            IsRunning = true;
+            Commencing?.Invoke(this, new EventArgs());
+            // Begin running the simulation.
+            var cancelToken = new CancellationTokenSource();
+            DoCommence?.Invoke(this, new CommenceArgs() { CancelToken = cancelToken });
+        }
+
+        public void Complete()
+        {
+            Completed?.Invoke(this, new EventArgs());
+            IsRunning = false;
+        }
+
+
+
         /// <summary>
         /// Runs the simulation on the current thread and waits for the simulation
         /// to complete before returning to caller. Simulation is NOT cloned before
