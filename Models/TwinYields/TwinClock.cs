@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Data;
     using APSIM.Shared.Utilities;
+    using Docker.DotNet.Models;
 
     /// <summary>
     /// The clock model is resonsible for controlling the daily timestep in APSIM. It 
@@ -318,10 +319,10 @@
         }
 
 
-        private void Step(object sender, CommenceArgs e)
+        public void Step()
         {
-            while (Today <= EndDate && (e.CancelToken == null || !e.CancelToken.IsCancellationRequested))
-            {
+            //while (Today <= EndDate && (e.CancelToken == null || !e.CancelToken.IsCancellationRequested))
+            //{
                 if (DoWeather != null)
                     DoWeather.Invoke(this, args);
 
@@ -479,7 +480,11 @@
                     DoReport.Invoke(this, args);
 
                 Today = Today.AddDays(1);
-            }
+            //}
+        }
+
+        public void Done()
+        {
             Today = EndDate;
 
             if (EndOfSimulation != null)
