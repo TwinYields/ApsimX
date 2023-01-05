@@ -17,7 +17,7 @@ namespace Models
     public class RainfallModifier : Model
     {
         [Link]
-        Clock clock = null;
+        IClock clock = null;
 
         [Link]
         Weather weather = null;

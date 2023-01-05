@@ -11,7 +11,7 @@
     using APSIM.Shared.Utilities;
     using NetMQ;
     using NetMQ.Sockets;
-      
+
     /// <summary>
     /// Monitor and influence simulation using ZMQ sockets
     /// </summary>
@@ -22,7 +22,7 @@
     public class SendReceive : Model
     {
         [Link]
-        Clock clock = null;
+        IClock clock = null;
 
         //[Link]
         //Weather weather = null;
