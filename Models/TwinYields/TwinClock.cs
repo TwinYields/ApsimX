@@ -10,6 +10,7 @@
     using System.Data;
     using APSIM.Shared.Utilities;
     using Docker.DotNet.Models;
+    using System.Threading;
 
     /// <summary>
     /// The clock model is resonsible for controlling the daily timestep in APSIM. It 
@@ -241,6 +242,24 @@
         public event EventHandler CLEMFinalizeTimeStep;
         /// <summary>CLEM end of timestep event</summary>
         public event EventHandler CLEMEndOfTimeStep;
+
+        //Attempt to move events from simulation model
+        /// <summary>Invoked when simulation is about to commence.</summary>
+        public event EventHandler Commencing;
+        
+        /// <summary>Invoked to signal start of simulation.</summary>
+        public event EventHandler<CommenceArgs> DoCommence;
+
+        /// <summary>Invoked when the simulation is completed.</summary>
+        public event EventHandler Completed;
+
+        public void Commence()
+        {
+            Commencing?.Invoke(this, new EventArgs());
+            // Begin running the simulation.
+            var cancelToken = new CancellationTokenSource();
+            DoCommence?.Invoke(this, new CommenceArgs() { CancelToken = cancelToken });
+        }
 
         // Public properties available to other models.
         /// <summary>Gets the today.</summary>
@@ -490,6 +509,7 @@
                 EndOfSimulation.Invoke(this, args);
 
             Summary?.WriteMessage(this, "Simulation terminated normally", MessageType.Information);
+            Completed?.Invoke(this, new EventArgs());
         }
     }
 }

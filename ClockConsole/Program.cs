@@ -53,7 +53,8 @@ namespace ClockConsole
 
             // Run is not called as the simulation is run step by step
             // -> New method is required to invoke events
-            sim.Commence();
+            //sim.Commence();
+            clock.Commence();
 
             while (clock.Today <= clock.EndDate)
             {
@@ -62,12 +63,10 @@ namespace ClockConsole
                     sim.Progress + "," + wt.Value + "," + leaf.LAI);
             }
             clock.Done();
-            sim.Complete();
             sim.Cleanup();
             storage.Close();
             Console.WriteLine("Done");
         }
-
+   
     }
-
 }
