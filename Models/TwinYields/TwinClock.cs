@@ -318,7 +318,6 @@
                 FinalInitialise.Invoke(this, args);
         }
 
-
         public void Step()
         {
             //while (Today <= EndDate && (e.CancelToken == null || !e.CancelToken.IsCancellationRequested))
