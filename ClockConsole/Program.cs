@@ -3,6 +3,11 @@ using Models.Core;
 using Models.Climate;
 using Models.Core.Run;
 using APSIM.Shared.JobRunning;
+using DocumentFormat.OpenXml.Validation;
+using Models;
+using Models.Storage;
+using Models.PMF;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 
 namespace ClockConsole
 {
@@ -34,14 +39,28 @@ namespace ClockConsole
             //sim.Cleanup();
 
             // Try to run step by step
+            var clock = (Models.TwinClock)sim.FindChild<IClock>();
+            var wt = sim.FindByPath("[Wheat].Grain.Total.Wt");
+            var wheat = sim.FindDescendant<Plant>();
+            var leaf = wheat.FindChild<Models.PMF.Organs.Leaf>();
+           
+            var storage = sims.FindChild<DataStore>();
+            storage.Dispose();
+            File.Delete(storage.FileName);
+            storage.Open();
             sim.Prepare();
             sim.Run();
-            //for i i
-            //sim.Progress
-           
 
+            while (clock.Today <= clock.EndDate)
+            {
+                clock.Step();
+                Console.WriteLine(clock.Today.Date.ToShortDateString() + ", " +
+                    sim.Progress + "," + wt.Value + "," + leaf.LAI);
+            }
+            clock.Done();
 
             Console.WriteLine(simFile);
+            
         }
     }
 }
